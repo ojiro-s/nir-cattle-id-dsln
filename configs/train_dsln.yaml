@@ -1,0 +1,48 @@
+# DSLN追加学習の設定。data と model.base_checkpoint のパスは環境に合わせて書き換える。
+seed: 42
+output_dir: runs/dsln
+num_workers: 2
+
+data:
+  train_rgb_dir: path/to/rgb_train
+  train_nir_dir: path/to/pseudo_labeled_nir
+  val_rgb_dir: path/to/rgb_val
+  val_nir_dir: path/to/nir_val
+
+model:
+  name: hf-hub:BVRA/MegaDescriptor-B-224
+  pretrained: true
+  base_checkpoint: path/to/base_model.pth  # RGBで学習したベースモデル
+  input_size: 224
+  device_ids: [0, 1]                       # GPUが2枚以上あるときのDataParallel
+
+sampler:
+  p: 16  # 1バッチのクラス数
+  k: 8   # 1クラスの枚数
+
+augmentation:
+  degrees: 90
+  scale: [0.5, 2.0]
+  shear: 10
+  brightness: 0.7
+  contrast: 0.7
+  blur_kernel_size: 5
+  blur_sigma: [0.1, 2.0]
+  p_gsb_rgb: 0.2  # RGB画像にグレースケール+ぼかしをかける確率
+  p_gsb_nir: 0.0
+
+loss:
+  margin: 0.5  # 単位は度(pytorch-metric-learningの仕様)
+  scale: 30
+
+optimizer:
+  lr: 1.0e-5
+  weight_decay: 1.0e-4
+
+scheduler:
+  eta_min: 1.0e-6
+
+trainer:
+  epochs: 100
+  accumulation_steps: 1
+  val_interval: 25

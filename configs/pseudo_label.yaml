@@ -1,0 +1,19 @@
+# 疑似ラベル生成の設定。data と model.checkpoint のパスは環境に合わせて書き換える。
+data:
+  rgb_db_dir: path/to/rgb_train          # <個体ID>/<画像> 形式のRGBデータベース
+  nir_dir: path/to/nir_unlabeled         # ImageFolder形式のNIR画像(クラス名は使わない)
+  output_dir: path/to/pseudo_labeled_nir # 疑似ラベル付きデータセットの出力先
+
+model:
+  name: hf-hub:BVRA/MegaDescriptor-B-224
+  checkpoint: path/to/base_model.pth     # RGBで学習したベースモデル
+  input_size: 224
+
+clustering:
+  n_clusters: 100
+  purity_threshold: 0.6
+  n_init: 10
+  random_state: 42
+
+batch_size: 128
+num_workers: 4
