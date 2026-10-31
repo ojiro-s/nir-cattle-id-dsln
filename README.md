@@ -8,12 +8,12 @@
 
 ```mermaid
 flowchart LR
-    RGB["RGB画像<br>ラベルあり"] --> BASE["1. ベースモデル構築<br>ArcFaceで学習"]
-    BASE --> PSEUDO["2. 疑似ラベル生成<br>Over-clustering・投票・棄却"]
+    RGB["RGB画像<br>ラベルあり"] --> BASE["Step 1<br>ベースモデル<br>構築"]
+    BASE --> PSEUDO["Step 2<br>疑似ラベル<br>生成"]
     NIR["NIR画像<br>ラベルなし"] --> PSEUDO
-    PSEUDO --> DSLN["3. DSLNで追加学習"]
+    PSEUDO --> DSLN["Step 3<br>DSLNで<br>追加学習"]
     RGB --> DSLN
-    DSLN --> OUT["RGB・NIRの両方で個体識別"]
+    DSLN --> OUT["RGB・NIRで<br>個体識別"]
 ```
 
 ## 背景
@@ -35,7 +35,7 @@ flowchart LR
 
 ## 手法
 
-学習は図の3段階です。このリポジトリには2と3を収めています。1のベースモデルは、MegaDescriptor事前学習重みのSwin TransformerをRGB画像でファインチューニングしたものです(本リポジトリには含まない)。
+学習は図の3段階です。このリポジトリにはStep 2と3を収めています。Step 1のベースモデルは、MegaDescriptor事前学習重みのSwin TransformerをRGB画像とArcFace Lossでファインチューニングしたものです(本リポジトリには含まない)。
 
 ### DSLN(Domain-Specific LayerNorm)
 
